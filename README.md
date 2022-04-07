@@ -22,3 +22,4 @@ use on ur own risk ⚠️
 | :---:      | :---:       |
 | Debian 11 | ✅ |
 
+i literally made this so i can save my time lol
