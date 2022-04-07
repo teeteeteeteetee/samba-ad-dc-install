@@ -1,5 +1,6 @@
 # samba-ad-dc-install
 
-| Supported OS           |     |
-| Debian 11              | ✅  |
-
+| Name     | Character |
+| ---      | ---       |
+| Backtick | `         |
+| Pipe     | \|        |
