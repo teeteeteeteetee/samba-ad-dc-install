@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if [[ $EUID -ne 0 ]]; then
-  echo "* This script must be executed with root privileges (sudo)." 1>&2
-  exit 1
-fi
-
 repo=0
 
 normal=`echo "\033[m"`
@@ -15,24 +10,39 @@ fgred=`echo "\033[31m"`
 green=`echo "\033[1;32m"`
 yellow=`echo "\033[1;33m"`
 
+if [[ $EUID -ne 0 ]]; then
+  printf "* ${menu}This script must be executed with root privileges (sudo).\n" 1>&2
+  exit 1
+fi
+
+exit_ln(){
+    printf "\n"
+    exit
+}
+
 update_package(){
     apt update
 }
 
-install_package(){
-    printf "${yellow}Removing krb5.conf (if exists)\n${normal}"
+remove(){
     rm -rf /etc/krb5.conf 2> /dev/null
-    printf "${yellow}Installing packages\n${normal}"
-    apt install acl attr samba samba-dsdb-modules samba-vfs-modules winbind libpam-winbind libnss-winbind libpam-krb5 krb5-config krb5-user dnsutils smbclient -y
-    printf "${yellow}Disabling services and enabling samba active directory\n${normal}"
-    systemctl disable --now smbd nmbd winbind
-    systemctl mask smbd nmbd winbind
-    systemctl unmask samba-ad-dc
+    rm -rf /etc/samba/smb.conf 2> /dev/null
 }
 
 remove_package(){
-    rm -rf /etc/krb5.conf 2> /dev/null
+    remove
     apt remove acl attr samba samba-dsdb-modules samba-vfs-modules winbind libpam-winbind libnss-winbind libpam-krb5 krb5-config krb5-user dnsutils smbclient -y
+}
+
+install_package(){
+    printf "${yellow}Removing krb5.conf and smb.conf (if exists) ᓚᘏᗢ\n${normal}"
+    remove
+    printf "${yellow}Installing packages ᓚᘏᗢ\n${normal}"
+    apt install acl attr samba samba-dsdb-modules samba-vfs-modules winbind libpam-winbind libnss-winbind libpam-krb5 krb5-config krb5-user dnsutils smbclient -y
+    printf "${yellow}Disabling services and enabling samba active directory ᓚᘏᗢ\n${normal}"
+    systemctl disable --now smbd nmbd winbind
+    systemctl mask smbd nmbd winbind
+    systemctl unmask samba-ad-dc
 }
 
 show_menu(){
@@ -41,7 +51,7 @@ show_menu(){
 
     printf "\n${menu}—————————————————————————————————————————————${normal}\n"
     printf "${menu}ᓚᘏᗢ${number} 1)${menu} Install Samba AD DC ${normal}\n"
-    printf "${menu}ᓚᘏᗢ${number} 2)${menu} Install Samba AD DC (Change hostname) ${normal}\n"
+    printf "${menu}ᓚᘏᗢ${number} 2)${menu} Install Samba AD DC (Change hostname / may cause some issues related to /etc/hosts) ${normal}\n"
     printf "${menu}ᓚᘏᗢ${number} 3)${menu} Remove Samba AD DC ${normal}\n"
     printf "${menu}ᓚᘏᗢ${number} 4)${menu} Remove Samba AD DC (With packages) ${normal}\n"
     printf "${menu}ᓚᘏᗢ${number} 5)${menu} Github Repository${normal}\n"
@@ -58,12 +68,48 @@ show_menu(){
 
     case "${userinput}" in
         1)
-            update_package
-            install_package
+            printf "\n"
+            read -n 1 -p "This will remove your current settings. Are you sure about that? (Y/N): " yn
+            if [ "$yn" != "y" ] && [ "$yn" != "Y" ]
+            then
+                show_menu
+            fi
+                update_package
+                install_package
             ;;
         2)
-            update_package
-            install_package
+            printf "\n"
+            read -n 1 -p "This will remove your current settings. Are you sure about that? (Y/N): " yn
+            if [ "$yn" != "y" ] && [ "$yn" != "Y" ]
+            then
+                show_menu
+            fi
+
+            printf "\n${yellow}Please enter your new hostname: (dc1) ${normal} "
+            read hst
+            if [ -n "$hst" ]
+            then
+                read -n 1 -p "This will be your current hostname (${hst}). Are you sure about that? (Y/N): " yn
+                    if [ "$yn" != "y" ] && [ "$yn" != "Y" ]
+                    then
+                        show_menu
+                    fi
+                    
+                    hostnamectl set-hostname $hst
+                    update_package
+                    install_package
+            else
+                read -n 1 -p "This will be your current hostname (dc1). Are you sure about that? (Y/N): " yn
+                    if [ "$yn" != "y" ] && [ "$yn" != "Y" ]
+                    then
+                        show_menu
+                    fi
+                        
+                    hostnamectl set-hostname dc1
+                    update_package
+                    install_package
+            fi
+            
             ;;
         3)
             ;;
@@ -77,7 +123,8 @@ show_menu(){
             ;;
         x|X)
             clear
-            exit;;
+            exit_ln
+            ;;
         *)
         show_menu
         ;;
