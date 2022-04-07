@@ -1,12 +1,12 @@
 # samba-ad-dc-install
 
 Choose one of the downloaders below  
-curl:  
+**curl**:  
 ```  
 curl -O https://raw.githubusercontent.com/lolitee/samba-ad-dc-install/main/install.sh  
 chmod +x install.sh  
 ```  
-wget:  
+**wget**:  
 ```  
 wget https://raw.githubusercontent.com/lolitee/samba-ad-dc-install/main/install.sh  
 chmod +x install.sh  
