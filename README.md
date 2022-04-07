@@ -2,5 +2,5 @@
 
 | Supported OS     |  |
 | :---:      | :---:       |
-| Backtick | `         |
-| Pipe     | \|        |
+| Debian 11 | ✅ |
+|
