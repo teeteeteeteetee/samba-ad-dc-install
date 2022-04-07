@@ -1,6 +1,6 @@
 # samba-ad-dc-install
 
-| Supported OS     | \n |
-| ---      | ---       |
+| Supported OS     |  |
+| :---:      | :---:       |
 | Backtick | `         |
 | Pipe     | \|        |
