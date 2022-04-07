@@ -1,7 +1,5 @@
 # samba-ad-dc-install
 
-#How to install:
-
 curl:  
 ```  
 curl -O https://raw.githubusercontent.com/lolitee/samba-ad-dc-install/main/install.sh  
