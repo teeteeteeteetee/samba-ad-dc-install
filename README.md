@@ -2,8 +2,8 @@
 
 #How to install:
 
-wget:
-`wget https://raw.githubusercontent.com/lolitee/samba-ad-dc-install/main/install.sh | chmod +x install.sh`
+wget:\n
+`wget https://raw.githubusercontent.com/lolitee/samba-ad-dc-install/main/install.sh | chmod +x install.sh`\n
 `./install.sh`
 
 use on ur own risk ⚠️
