@@ -12,7 +12,7 @@ chmod +x install.sh
 wget https://raw.githubusercontent.com/lolitee/samba-ad-dc-install/main/install.sh  
 chmod +x install.sh  
 ```  
-And then run it:
+And then run it with sudo/root:
 ```  
 ./install.sh  
 ```
