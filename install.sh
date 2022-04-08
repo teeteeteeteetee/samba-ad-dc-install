@@ -29,8 +29,8 @@ update_package(){
 }
 
 remove(){
-    rm -rf /etc/krb5.conf 2> /dev/null
-    rm -rf /etc/samba/smb.conf 2> /dev/null
+    rm -rf /etc/krb5.conf
+    rm -rf /etc/samba/smb.conf
 }
 
 remove_package(){
