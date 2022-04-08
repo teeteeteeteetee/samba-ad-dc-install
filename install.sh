@@ -35,7 +35,8 @@ remove(){
 
 remove_package(){
     remove
-    apt remove acl attr samba samba-dsdb-modules samba-vfs-modules winbind libpam-winbind libnss-winbind libpam-krb5 krb5-config krb5-user dnsutils smbclient -y
+    apt remove samba -y
+    apt autoremove -y
 }
 
 install_package(){
